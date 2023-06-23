@@ -1,5 +1,51 @@
 ---
-title: "06-22-2023"
+title: Babynames 
+execute: 
+  echo: false
 ---
 
+This is an example plot using data from the babynames package
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(babynames)
+library(ggthemes)
 ```
+
+
+```{r}
+#| message: false
+#| warning: false
+#pattern <- "^[AEIOU].*[aeiou]$"
+#babynames  |>
+#  filter(str_detect(name, pattern))
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+pattern <- "^[AEIOU].*[aeiou]$"
+babynames |> 
+  filter(str_detect(name, pattern)) |> 
+  summarise(sum_n = sum(n), 
+            .by = c(year,sex), 
+            sum_prop = (sum(prop))) |>
+  ggplot(aes(x = year, y = sum_prop, 
+             fill = sex, 
+             .by = sex)) + 
+  geom_area() + 
+  labs(x="Year",
+       y="Percent of babies\nwhose name starts and ends with a vowel", 
+       title="US Vowel Babies",
+       subtitle = "There have been more female babies\nwhose names start and end with a vowel than the male babies.",
+       caption = "babynames data source") + 
+  scale_y_continuous(
+  labels = scales::percent_format()) +
+  theme_few()
+```
+
+
